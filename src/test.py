@@ -11,3 +11,6 @@ response = requests.get(url)
 
 with open('test.html', 'w', encoding='utf-8') as file:
     file.write(response.text)
+
+soup = BeautifulSoup(response.text, 'html.parser')
+print(soup.prettify())
