@@ -9,5 +9,8 @@ url = 'https://news.yahoo.co.jp/topics/top-picks'
 response = request.urlopen(url)
 soup = BeautifulSoup(response)
 
-test_one = soup.find('nav', class_='sc-bBXrwG immAzn')
-print(soup)
+script_tag_data = soup.find_all('script')  # すべてのscriptタグを取得
+prepare_data = script_tag_data[3] # ニュースのタイトルが入っているデータ
+
+
+# topicListのところを取得しなければならない。(多分、totalの方が全体的な数で、listにはニュースのタイトルとURLが入っている)
