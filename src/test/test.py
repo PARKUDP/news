@@ -12,5 +12,28 @@ soup = BeautifulSoup(response)
 script_tag_data = soup.find_all('script')  # すべてのscriptタグを取得
 prepare_data = script_tag_data[3] # ニュースのタイトルが入っているデータ
 
+# ニュースのタイトルを取得
+news_title = re.findall(r'"title":".*?"', str(prepare_data))  # ニュースのタイトルを取得
+news_title = [re.sub(r'"title":"', '', i) for i in news_title]  # ニュースのタイトルの前の文字列を削除
+news_title = [re.sub(r'"', '', i) for i in news_title]  # ニュースのタイトルの後の文字列を削除
 
-# topicListのところを取得しなければならない。(多分、totalの方が全体的な数で、listにはニュースのタイトルとURLが入っている)
+# ニュースのURLを取得(処理)
+news_url = re.findall(r'"url":".*?"', str(prepare_data))  # ニュースのURLを取得
+news_url = [re.sub(r'"url":"', '', i) for i in news_url]  # ニュースのURLの前の文字列を削除
+news_url = [re.sub(r'"', '', i) for i in news_url]  # ニュースのURLの後の文字列を削除
+
+
+# ニュースのタイトルとURLの必要ない情報を削除
+news_title.remove('主要トピックス一覧')
+news_title.remove('アクセスランキング')
+news_title.remove('コメントランキング')
+news_title.remove('トピックス（主要）')
+
+for url in news_url:
+    if url.find('https://news.yahoo.co.jp/pickup/') == -1:
+        news_url.remove(url)
+
+# ニュースのタイトルとURLをdictで保存する。
+result = dict(zip(news_title, news_url))
+print(result)
+print(len(result))
