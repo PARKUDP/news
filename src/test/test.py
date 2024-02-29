@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from collections import Counter
 import re
 
-url = 'https://news.yahoo.co.jp/topics/top-picks'
+url = 'https://news.yahoo.co.jp/topics/top-picks?page=1'
 
 # ページの内容を取得
 response = request.urlopen(url)
