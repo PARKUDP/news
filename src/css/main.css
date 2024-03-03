@@ -1,0 +1,4 @@
+.url_list {
+    display: flex;
+    flex-flow: column;
+}
