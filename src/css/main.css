@@ -1,4 +1,11 @@
-.url_list {
-    display: flex;
-    flex-flow: column;
+.ranking li{
+    counter-increment: rank;
 }
+
+.ranking li::before{
+    content: counter(rank) "位";
+    color:cadetblue;
+    font-weight: 600;
+    line-height: initial;
+}
+
