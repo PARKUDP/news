@@ -3,6 +3,7 @@ from urllib import request
 from bs4 import BeautifulSoup
 from collections import Counter
 import re
+from collections import ChainMap
 
 def data_inquire(url):
     response = request.urlopen(url)
@@ -48,8 +49,7 @@ data_two = data_inquire(url_two)
 data_three = data_inquire(url_three)
 data_four = data_inquire(url_four)
 
-result_data = data_one | data_two | data_three | data_four
-
+result_data = ChainMap(data_one, data_two, data_three, data_four)
 num = 1
 for data in result_data:
     st.write(f"第{num}記事：{data}[link]({result_data[data]})")
