@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from collections import Counter
 import re
 from collections import ChainMap
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 app = Flask(__name__)
 
 @app.route('/news')
@@ -22,11 +22,11 @@ def json_news_data():
 
     result_data = ChainMap(data_one, data_two, data_three, data_four)
     merged_data = {}
+    
     for d in result_data.maps:
         merged_data.update(d)
     
-    # 変換したdictをJSON化して返す
-    return jsonify(merged_data)
+    return render_template('news.html', news_data=merged_data)
 
 def data_inquire(url):
     response = request.urlopen(url)
@@ -62,4 +62,3 @@ def data_inquire(url):
 
 if __name__ == '__main__':
     app.run(debug=True)
-    json_news_data()
