@@ -1,13 +1,36 @@
-import streamlit as st
 from urllib import request
 from bs4 import BeautifulSoup
 from collections import Counter
 import re
 from collections import ChainMap
+from flask import Flask, jsonify
+app = Flask(__name__)
+
+@app.route('/news')
+def json_news_data():
+    # トピックス一覧1~100件までのURL
+    url_one = 'https://news.yahoo.co.jp/topics/top-picks?page=1'
+    url_two = 'https://news.yahoo.co.jp/topics/top-picks?page=2'
+    url_three = 'https://news.yahoo.co.jp/topics/top-picks?page=3'
+    url_four = 'https://news.yahoo.co.jp/topics/top-picks?page=4'
+
+    # トピック一覧1~100件までのデータ
+    data_one = data_inquire(url_one)
+    data_two = data_inquire(url_two)
+    data_three = data_inquire(url_three)
+    data_four = data_inquire(url_four)
+
+    result_data = ChainMap(data_one, data_two, data_three, data_four)
+    merged_data = {}
+    for d in result_data.maps:
+        merged_data.update(d)
+    
+    # 変換したdictをJSON化して返す
+    return jsonify(merged_data)
 
 def data_inquire(url):
     response = request.urlopen(url)
-    soup = BeautifulSoup(response)
+    soup = BeautifulSoup(response, features="lxml")
 
     script_tag_data = soup.find_all('script')  # すべてのscriptタグを取得
     prepare_data = script_tag_data[3] # ニュースのタイトルが入っているデータ
@@ -37,22 +60,6 @@ def data_inquire(url):
     result = dict(zip(news_title, news_url))
     return result
 
-# トピックス一覧1~100件までのURL
-url_one = 'https://news.yahoo.co.jp/topics/top-picks?page=1'
-url_two = 'https://news.yahoo.co.jp/topics/top-picks?page=2'
-url_three = 'https://news.yahoo.co.jp/topics/top-picks?page=3'
-url_four = 'https://news.yahoo.co.jp/topics/top-picks?page=4'
-
-# トピック一覧1~100件までのデータ
-data_one = data_inquire(url_one)
-data_two = data_inquire(url_two)
-data_three = data_inquire(url_three)
-data_four = data_inquire(url_four)
-
-result_data = ChainMap(data_one, data_two, data_three, data_four)
-num = 1
-for data in result_data:
-    st.write(f"第{num}記事：{data}[link]({result_data[data]})")
-    num += 1
-    
-
+if __name__ == '__main__':
+    app.run(debug=True)
+    json_news_data()
