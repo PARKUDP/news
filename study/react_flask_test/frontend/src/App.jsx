@@ -13,7 +13,7 @@ const App = () => {
 
   const fetchData = async () => {
     try {
-      const result = await axios('http://127.0.0.1:5000/news');
+      const result = await axios('http://127.0.0.1:5000/data');
       setJsonData(result.data);
       setLoading(false);
     } catch (error) {
@@ -45,7 +45,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>NEWS LIST</h1>
+      <h1>JSON Data</h1>
       <button>reload</button>
       {loading ? (
         <p>Loading...</p>
