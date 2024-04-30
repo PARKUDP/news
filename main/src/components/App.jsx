@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+//import '../style/App.css';
 
 const App = () => {
   const [jsonData, setJsonData] = useState(null);
@@ -21,6 +21,10 @@ const App = () => {
       setLoading(false);
     }
   };
+  //URL 開く
+  const Openlink = (e) => {
+    window.open(e.target.value);
+  }
 
   const renderData = () => {
     if (jsonData) {
@@ -29,7 +33,7 @@ const App = () => {
           {Object.entries(jsonData).map(([key, value]) => (
             <div key={key}>
               <strong>{key}: </strong>
-              {value}
+              <button onClick={Openlink} value={value} className='arrow'>記事へ</button>
             </div>
           ))}
         </div>
@@ -38,7 +42,6 @@ const App = () => {
       return <p>Loading...</p>;
     }
   };
-  
   
   
   
