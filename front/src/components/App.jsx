@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-//import '../style/App.css';
+import '../style/App.css';
 
 const App = () => {
   const [jsonData, setJsonData] = useState(null);
