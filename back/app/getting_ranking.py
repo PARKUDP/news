@@ -14,7 +14,7 @@ from flask_cors import CORS  #study/src/main.pyより
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/news')
+@app.route('/news_yahoo')
 def json_news_data():
     # トピックス一覧1~100件までのURL
     url_one = 'https://news.yahoo.co.jp/topics/top-picks?page=1'
