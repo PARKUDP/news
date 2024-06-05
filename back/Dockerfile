@@ -12,4 +12,4 @@ RUN pip install --no-cache-dir flask_cors
 RUN pip install --no-cache-dir requests
 RUN pip install lxml
 
-CMD ["bash", "-c", "cd app && flask run"]
+CMD ["flask", "run", "--host=0.0.0.0"]

@@ -5,11 +5,16 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./back:/app 
+      - ./back:/app
     environment:
-      - FLASK_APP=getting_ranking.py
+      - FLASK_APP=app/getting_ranking.py
       - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_ENV=development
+
   frontend:
     build: ./front
     ports:
       - "3000:3000"
+    volumes:
+      - ./front:/app
+      - /app/node_modules
