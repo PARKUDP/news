@@ -1,21 +1,26 @@
 import React from 'react';
 import '../style/main.css'; 
 import calendarIcon from './image/calendar_icon.png'; 
+import titleIcon from './image/tittle.png';
 
 function App() {
   const sites = [
-    { name: 'yahooニュース', url: '/news_yahoo' },
-    { name: 'CNNニュース', url: 'https://www.cnn.com' }
+    { name: 'yahooニュースランキング', url: '/news_yahoo' },
+    { name: 'CNNニュースランキング', url: 'https://www.cnn.com' }
   ];
 
+  // カレンダーアイコンをクリックしたときの処理
   const handleCalendarClick = () => {
-    alert('カレンダーボタンがクリックされました');
+    alert("やまだです。")
   };
+
 
   return (
     <div className="App">
       <header>
-        Todays News
+        <h1>
+          <a href="/" className="title-Icon"><img src={titleIcon} alt="title"/></a>
+        </h1>
         <button className="calendar-button" onClick={handleCalendarClick}>
           <img src={calendarIcon} alt="Calendar" />
         </button>
@@ -31,9 +36,11 @@ function App() {
         </div>
       </main>
       <footer>
-        <div>Github: <a href="https://github.com/PARKUDP/news">https://github.com/PARKUDP/news</a></div>
-        <div>Render: <a href="https://your_render_url">https://your_render_url</a></div>
-        <div>お問合せ: your_email@gmail.com</div>
+        <div className="footer-url">
+          <div><a href="https://github.com/PARKUDP/news">GitHub:https://github.com/PARKUDP/news</a></div>
+          <div><a href="https://your_render_url">Render:https://your_render_url</a></div>
+          <div>お問合せ:your_email@gmail.com</div>
+        </div>
       </footer>
     </div>
   );

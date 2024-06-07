@@ -5,12 +5,14 @@ import Main from './Main';
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <div className="App">
+      <BrowserRouter>
       <Routes>
-        <Route path="/main" element={<Main />} />
+        <Route path="/" element={<Main />} />
         <Route path="/news_yahoo" element={<Yahoo />} />
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </div>
   );
 };
 
