@@ -17,30 +17,21 @@ def data_inquire(url):
     prepare_data = script_tag_data # ニュースのタイトルが入っているデータ
   
 
-    # ニュースのタイトルを取得
-    news_title = re.findall(r'<a href="([^"]+)">\s*([^<]+)\s*</a>', str(prepare_data)) # ニュースのタイトルを取得
-    print(news_title)
-    print(news_title[0])
-    news_title = [re.sub(r'"title":"', '', i) for i in news_title]  # ニュースのタイトルの前の文字列を削除
-    news_title = [re.sub(r'"', '', i) for i in news_title]  # ニュースのタイトルの後の文字列を削除
-
-    # ニュースのURLを取得(処理)
-    news_url = re.findall(r'"url":".*?"', str(prepare_data))  # ニュースのURLを取得
-    news_url = [re.sub(r'"url":"', '', i) for i in news_url]  # ニュースのURLの前の文字列を削除
-    news_url = [re.sub(r'"', '', i) for i in news_url]  # ニュースのURLの後の文字列を削除
+    # ニュースから得られたデータを整理
+    format_url = 'https://www.cnn.co.jp/archives/'
+    news_data = re.findall(r'<a href="([^"]+)">\s*([^<]+)\s*</a>', str(prepare_data)) 
+    news_data_list = [list(item) for item in news_data]  # リストinリストの状態でurlとニュースタイトルを保持 ==> news_data_list
+    for item_data in news_data_list:  # item_data_listを、[[title, url], [title, url]...]の状態に上書き
+        item_data[0] = format_url + item_data[0]
+        item_data[1] = item_data[1].replace('\u3000', ' ')
+        item_data[0], item_data[1] = item_data[1], item_data[0]
 
 
-    # ニュースのタイトルとURLの必要ない情報を削除
-    # news_title.remove('主要トピックス一覧')
-    # news_title.remove('アクセスランキング')
-    # news_title.remove('コメントランキング')
-    # news_title.remove('トピックス（主要）')
-
-
-    # 取得したurlにて下記の文字列が含まれない場合はremoveする。
-    for url in news_url:
-        if url.find('https://www.cnn.co.jp/archives/') == -1:
-            news_url.remove(url)
+    # titleを別でリストに保存
+    news_title = [item_title[0] for item_title in news_data_list]
+   
+    # ニュースのURLを別で
+    news_url = [item_url[1] for item_url in news_data_list]
 
     # ニュースのタイトルとURLをdictで保存する。
     result = dict(zip(news_title, news_url))
