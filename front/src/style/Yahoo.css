@@ -26,14 +26,3 @@
 .arrow:hover {
   background-color: #bbbbbb;
 }
-
-footer {
-	background-color: #000;
-	color: #fff;
-	text-align: center;
-	padding: 10px;
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-  }
-  
