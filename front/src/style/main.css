@@ -9,11 +9,12 @@ header {
   width: 100%;
   padding: 35px 1% 35px;
   background-color: #f8f9fa;
-  border-bottom: 3px solid #ccc;
+  position: relative;
 }
 
 header h1 {
-  margin: 0; padding: 0;
+  margin: 0; 
+  padding: 0;
   font-size: 25px;
 }
 
@@ -40,7 +41,10 @@ header .calendar-button img {
 }
 
 main {
+  border-top: 3px solid #ccc;
   padding: 20px;
+  min-height: calc(100vh - 70px - 60px); 
+  box-sizing: border-box;
 }
 
 .section-title {
@@ -75,6 +79,16 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+}
+
+.footer-hidden {
+  transform: translateY(100%);
+}
+
+.footer-visible {
+  transform: translateY(0);
 }
 
 footer a {
@@ -83,3 +97,22 @@ footer a {
   margin: 0 5px;
 }
 
+.toggle-footer-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  left: 98%;
+  transform: translateX(-50%);
+  bottom: 80px; 
+  z-index: 1001;
+  transition: bottom 0.3s ease-in-out;
+}
+
+.footer-hidden ~ .toggle-footer-button {
+  bottom: 1px; 
+}
+
+.toggle-footer-button img {
+  width: 30px;
+}

@@ -1,9 +1,7 @@
-// Yahoo.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Layout from './Layout'; 
 import '../style/Yahoo.css';
-import calendarIcon from './image/calendar_icon.png'; 
-import titleIcon from './image/tittle.png';
 
 const Yahoo = () => {
   const [jsonData, setJsonData] = useState(null);
@@ -27,10 +25,6 @@ const Yahoo = () => {
     }
   };
 
-  const handleCalendarClick = () => {
-    alert("やまだです。")
-  };
-  // URLを開く関数
   const openLink = (e) => {
     window.open(e.target.value, '_blank');
   };
@@ -53,28 +47,16 @@ const Yahoo = () => {
   };
 
   return (
-    <div>
-      <header>
-        <h1>
-          <a href="/" className="title-Icon"><img src={titleIcon} alt="title"/></a>
-        </h1>
-        <button className="calendar-button" onClick={handleCalendarClick}>
-          <img src={calendarIcon} alt="Calendar" />
-        </button>
-      </header>
-      <main>
-        <button onClick={fetchData}>reload</button>
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>Error: {error}</p>
-        ) : (
-          renderData()
-        )}
-      </main>
-    </div>
-    
-    
+    <Layout>
+      <button onClick={fetchData}>reload</button>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : (
+        renderData()
+      )}
+    </Layout>
   );
 };
 
