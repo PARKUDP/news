@@ -41,4 +41,4 @@ def data_inquire(url):
 
 
 if __name__ == "__main__":
-    print(data_inquire("https://www.cnn.co.jp/archives/2/"))
+    data_inquire()
