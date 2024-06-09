@@ -10,16 +10,13 @@ from flask import Flask, jsonify, render_template
 from flask_cors import CORS  #study/src/main.pyより
 import scraping
 
-
 #CORSを記述
 app = Flask(__name__)
 CORS(app)
 
-
-
 # yahooニュース表示の設定
 @app.route('/news_yahoo')
-def json_news_data():
+def json_news_yahoo():
     # トピックス一覧1~100件までのURL
     url_one = 'https://news.yahoo.co.jp/topics/top-picks?page=1'
     url_two = 'https://news.yahoo.co.jp/topics/top-picks?page=2'
@@ -40,20 +37,17 @@ def json_news_data():
     
     return jsonify(merged_data) ######## marged_dataをjson形式でreturnに変更
 
-
-
-
 # cnnニュース表示の設定
 @app.route('/news_cnn')
-def json_news_data():
+def json_news_cnn():
     # トピックス一覧1~90件までのURL
     url_one = 'https://www.cnn.co.jp/archives/'
     url_two = 'https://www.cnn.co.jp/archives/2/'
-    url_three = 'https://www.cnn.co.jp/archives/3'
-    url_four = 'https://www.cnn.co.jp/archives/4'
-    url_five = 'https://www.cnn.co.jp/archives/5'
-    url_six = 'https://www.cnn.co.jp/archives/6'
-    url_seven = 'https://www.cnn.co.jp/archives/7'
+    url_three = 'https://www.cnn.co.jp/archives/3/'
+    url_four = 'https://www.cnn.co.jp/archives/4/'
+    url_five = 'https://www.cnn.co.jp/archives/5/'
+    url_six = 'https://www.cnn.co.jp/archives/6/'
+    url_seven = 'https://www.cnn.co.jp/archives/7/'
 
     # トピック一覧1~90件までのデータ
     data_one = scraping.cnn_news.data_inquire(url_one)
