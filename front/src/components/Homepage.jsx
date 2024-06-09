@@ -4,7 +4,7 @@ import Layout from './Layout';
 const HomePage = () => {
   const sites = [
     { name: 'yahooニュースランキング', url: '/news_yahoo' },
-    { name: 'CNNニュースランキング', url: 'https://www.cnn.com' }
+    { name: 'CNNニュースランキング', url: '/news_cnn' }
   ];
 
   return (
