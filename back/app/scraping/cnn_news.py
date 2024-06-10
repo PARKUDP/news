@@ -29,9 +29,9 @@ def data_inquire(url):
 
     # titleを別でリストに保存
     news_title = [item_title[0] for item_title in news_data_list]
-   
+
     # ニュースのURLを別で
-    news_url = [item_url[1] for item_url in news_data_list]
+    news_url = [item_url[1].replace('archives//', '') for item_url in news_data_list]
 
     # ニュースのタイトルとURLをdictで保存する。
     result = dict(zip(news_title, news_url))
