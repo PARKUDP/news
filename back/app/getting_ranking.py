@@ -1,5 +1,6 @@
 ###### sutdy/src/main.pyよりコードをペースト
 ###### CORSをimport
+###### 
 
 from urllib import request
 from bs4 import BeautifulSoup
@@ -9,10 +10,28 @@ from collections import ChainMap
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS  #study/src/main.pyより
 import scraping
+from flask_sqlalchemy import SQLAlchemy
+import os
+
+
+path = os.path.abspath(os.path.dirname(__file__))
 
 #CORSを記述
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.news"   # データベース作成するための種類とファイル名
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False  # メモリ節約でとりま無効
+
+db = SQLAlchemy(app)
+
 CORS(app)
+
+
+# DataBaseのclass設定
+class News_db(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    medium = db.Column(db.String("128"), nullable=False)
+    news_data = db.Column(db.JSON, nullable=False)
+
 
 # yahooニュース表示の設定
 @app.route('/news_yahoo')
@@ -34,8 +53,17 @@ def json_news_yahoo():
     
     for d in result_data.maps:
         merged_data.update(d)
+
+
+    # ここでデータベースに保存
+    medium = "yahoo"
+    new_data = News_db(medium=medium, news_data=merged_data)
+    db.session.add(new_data)
+    db.session.commit()
+    
     
     return jsonify(merged_data) ######## marged_dataをjson形式でreturnに変更
+
 
 # cnnニュース表示の設定
 @app.route('/news_cnn')
@@ -63,8 +91,20 @@ def json_news_cnn():
     
     for d in result_data.maps:
         merged_data.update(d)
+
+    
+    # ここでデータベースに保存
+    medium = "cnn"
+    new_data = News_db(medium=medium, news_data=merged_data)
+    db.session.add(new_data)
+    db.session.commit()
+
     
     return jsonify(merged_data)
 
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    with app.app_context():
+        db.create_all()
+
+    #app.run(debug=True)
