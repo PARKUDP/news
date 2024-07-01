@@ -32,17 +32,17 @@ migrate = Migrate(app, db)
 # 追加する媒体を増やすとき、ここにテーブル定義
 class today_yahoo_db(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    medium = db.Column(db.String("128"), nullable=False)
-    news_title = db.Column(db.String("128"), nullable=False)
-    news_url = db.Column(db.String("128"), nullable=False)
+    medium = db.Column(db.String(128), nullable=False)
+    news_title = db.Column(db.String(128), nullable=False)
+    news_url = db.Column(db.String(128), nullable=False)
     create_at = db.Column(db.DateTime, nullable=False, default=datetime.now)  # 作成日時
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)  # 更新日時
 
 class today_cnn_db(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    medium = db.Column(db.String("128"), nullable=False)
-    news_data = db.Column(db.String("128"), nullable=False)
-    news_url = db.Column(db.String("128"), nullable=False)
+    medium = db.Column(db.String(128), nullable=False)
+    news_title = db.Column(db.String(128), nullable=False)
+    news_url = db.Column(db.String(128), nullable=False)
     create_at = db.Column(db.DateTime, nullable=False, default=datetime.now)  # 作成日時
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)  # 更新日時
 
@@ -123,4 +123,13 @@ def json_news_cnn():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        json_news_cnn()
+        json_news_yahoo()
+    
+
+    
+    """
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
+    """
