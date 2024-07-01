@@ -1,37 +1,52 @@
 ###### sutdy/src/main.pyよりコードをペースト
 ###### CORSをimport
-###### 
+###### flask-migrate をインストール 2024.6.26
 
+from email.policy import default
 from urllib import request
 from bs4 import BeautifulSoup
 from collections import Counter
 import re
 from collections import ChainMap
 from flask import Flask, jsonify, render_template
-from flask_cors import CORS  #study/src/main.pyより
+from flask_cors import CORS 
 import scraping
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from datetime import datetime
 import os
 
 
-path = os.path.abspath(os.path.dirname(__file__))
-
 #CORSを記述
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.news"   # データベース作成するための種類とファイル名
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False  # メモリ節約でとりま無効
-
-db = SQLAlchemy(app)
-
 CORS(app)
 
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.news"   # データベース作成するための種類とファイル名
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False  # メモリ節約でとりま無効
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-# DataBaseのclass設定
-class News_db(db.Model):
+
+# DataBaseのclass(table)設定 ==================================================================
+# DataBaseとして、デーブル構造を　|id|medium|news_title|news_url|create_at|update_at|　としている。
+# 追加する媒体を増やすとき、ここにテーブル定義
+class today_yahoo_db(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    medium = db.Column(db.String("128"), nullable=False)
-    news_data = db.Column(db.JSON, nullable=False)
+    medium = db.Column(db.String(128), nullable=False)
+    news_title = db.Column(db.String(128), nullable=False)
+    news_url = db.Column(db.String(128), nullable=False)
+    create_at = db.Column(db.DateTime, nullable=False, default=datetime.now)  # 作成日時
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)  # 更新日時
 
+class today_cnn_db(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    medium = db.Column(db.String(128), nullable=False)
+    news_title = db.Column(db.String(128), nullable=False)
+    news_url = db.Column(db.String(128), nullable=False)
+    create_at = db.Column(db.DateTime, nullable=False, default=datetime.now)  # 作成日時
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)  # 更新日時
+
+# =====================================================================================
 
 # yahooニュース表示の設定
 @app.route('/news_yahoo')
@@ -50,19 +65,25 @@ def json_news_yahoo():
 
     result_data = ChainMap(data_one, data_two, data_three, data_four)
     merged_data = {}
-    
     for d in result_data.maps:
         merged_data.update(d)
 
 
     # ここでデータベースに保存
     medium = "yahoo"
-    new_data = News_db(medium=medium, news_data=merged_data)
-    db.session.add(new_data)
-    db.session.commit()
-    
+    for t, u in merged_data.items():
+        existing_data = today_yahoo_db.query.filter_by(news_title=t).first()
+        if existing_data:
+            existing_data.news_url = u
+            existing_data.updated_at = datetime.now()
+        else:
+            new_data = today_yahoo_db(medium=medium, news_title=t, news_url=u)
+            db.session.add(new_data)
+        db.session.commit()
+
     
     return jsonify(merged_data) ######## marged_dataをjson形式でreturnに変更
+
 
 
 # cnnニュース表示の設定
@@ -87,24 +108,38 @@ def json_news_cnn():
     data_seven= scraping.cnn_news.data_inquire(url_seven)
 
     result_data = ChainMap(data_one, data_two, data_three, data_four, data_five, data_six, data_seven)
-    merged_data = {}
-    
+    merged_data = {} 
     for d in result_data.maps:
         merged_data.update(d)
 
     
     # ここでデータベースに保存
     medium = "cnn"
-    new_data = News_db(medium=medium, news_data=merged_data)
-    db.session.add(new_data)
-    db.session.commit()
+    for t, u in merged_data.items():
+        existing_data = today_cnn_db.query.filter_by(news_title=t).first()
+        if existing_data:
+            existing_data.news_url = u
+            existing_data.updated_at = datetime.now()
+        else:
+            new_data = today_cnn_db(medium=medium, news_title=t, news_url=u)
+            db.session.add(new_data)
+        db.session.commit()
 
     
     return jsonify(merged_data)
 
 
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        json_news_cnn()
+        json_news_yahoo()
+    
 
-    #app.run(debug=True)
+    
+    """
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
+    """
