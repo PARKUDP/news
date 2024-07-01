@@ -72,8 +72,13 @@ def json_news_yahoo():
     # ここでデータベースに保存
     medium = "yahoo"
     for t, u in merged_data.items():
-        new_data = today_yahoo_db(medium=medium, news_title=t, news_url=u)
-        db.session.add(new_data)
+        existing_data = today_yahoo_db.query.filter_by(news_title=t).first()
+        if existing_data:
+            existing_data.news_url = u
+            existing_data.updated_at = datetime.now()
+        else:
+            new_data = today_yahoo_db(medium=medium, news_title=t, news_url=u)
+            db.session.add(new_data)
         db.session.commit()
 
     
@@ -111,8 +116,13 @@ def json_news_cnn():
     # ここでデータベースに保存
     medium = "cnn"
     for t, u in merged_data.items():
-        new_data = today_cnn_db(medium=medium, news_title=t, news_url=u)
-        db.session.add(new_data)
+        existing_data = today_cnn_db.query.filter_by(news_title=t).first()
+        if existing_data:
+            existing_data.news_url = u
+            existing_data.updated_at = datetime.now()
+        else:
+            new_data = today_cnn_db(medium=medium, news_title=t, news_url=u)
+            db.session.add(new_data)
         db.session.commit()
 
     
