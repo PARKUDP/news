@@ -136,8 +136,6 @@ if __name__ == '__main__':
         json_news_cnn()
         json_news_yahoo()
     
-
-    
     """
     with app.app_context():
         db.create_all()

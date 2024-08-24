@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
         </h1>
         <button
           className="calendar-button"
-          onClick={() => alert("やまだです。")}
+          onClick={() => alert("やまだで")}
         >
           <img src={calendarIcon} alt="Calendar" />
         </button>

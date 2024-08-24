@@ -7,3 +7,6 @@ beautifulsoup4
 flask_cors
 requests
 lxml
+flask_sqlalchemy
+flask_migrate
+sqlalchemy
